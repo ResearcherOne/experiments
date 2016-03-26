@@ -1,4 +1,4 @@
-## Ozet:
+## Nedir?
 	*Bu proje, olabilecek en basit expressJs projesi yani bir "Hello World" örnegi.
 	*Program, kullaniciya "Hello World" yazisi yazan bir sayfa gonderiyor.
 	
