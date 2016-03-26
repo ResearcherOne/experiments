@@ -5,7 +5,13 @@ This is a regular paragraph.
 
 <table>
     <tr>
-        <td>Foo</td>
+        Yay!! <td>Foo</td>
+    </tr>
+    <tr>
+        Yay!! <td>Foo</td>
+    </tr>
+    <tr>
+        Yay!! <td>Foo</td>
     </tr>
 </table>
 
