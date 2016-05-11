@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    <link rel="stylesheet" href="http://cdn.webix.com/edge/webix.css" type="text/css"> 
+    <script src="http://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
+	<script src="./js/mqttws31.js" type="text/javascript"></script>
+	<script src="./js/mqttApp.js" type="text/javascript"></script>
+		<style>
+			#areaA, #areaB {
+				margin: 50px 10px;
+				width:320px;
+				height:400px;
+				float: left;
+			}
+			
+		</style>
+	</head>
+    <body>
+	<div id="areaA"></div>
+        <script type="text/javascript" charset="utf-8">
+		var tableData = [
+			{rank:"My Fair Lady", title:1964, year:533848, votes:8.9},
+			{rank:"My Fair Lady", title:1964, year:533848, votes:8.9}
+		];
+		//serialized json: {"rank":"Rock n Roll", "title":1996, "year":533848, "votes":8.9}
+						 ;
+		var tabbar = {
+		   view:"tabbar", selected: 'listView', multiview:true, options: [
+				{ value: 'List', id: 'listView'},
+				{ value: 'Form', id: 'formView'},
+				{ value: 'About', id: 'aboutView'}
+			]
+		};
+		var data = {
+			animate:false,
+			cells:[
+				{
+					id:"listView",
+					view:"list",
+					template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+					type:{
+						height:60
+					},
+					select:true,
+					data:tableData
+				},
+				{
+					id:"formView",
+					template:"Place for the form control"
+				},
+				{
+				 	id:"aboutView",
+					template:"About the app"
+				}
+			]
+		};
+		
+		function isJson(str) {
+			try {
+				JSON.parse(str);
+			} catch (e) {
+				return false;
+			}
+			return true;
+		}
+
+		function parseRecievedMessage(message){
+			if (isJson(message)) {
+				var recievedObject = JSON.parse(message);
+				//console.log("That:");
+				//console.log(tableData);
+				tableData.push(recievedObject);
+				$$("listView").add(recievedObject);
+				//$$("listView").refresh();
+			} else {
+				console.log("Meh this is NOT json((()))");
+			}
+		};
+		
+		webix.ready(function(){
+			mqttApp.initialize();
+			mqttApp.setMessageRecievedCallback(parseRecievedMessage);
+			
+			webix.ui({
+				container: "areaA",
+				type:"clean",
+				rows:[
+					tabbar,
+					data
+				]
+			});
+			
+		});
+        </script>
+    </body>
+</html>

@@ -17,6 +17,7 @@ app.get('/mailbutton/:buttonowner', function (request, response) { //Request com
   var buttonOwner = request.params.buttonowner;
   response.send('Button is succesfully pressed.');
   sendMail(buttonOwner);
+  console.log("request is recieved.");
 });
 
 app.listen(80, function () { //Request that is coming to port 80 will be handled.
