@@ -19,25 +19,24 @@
 	<div id="areaA"></div>
         <script type="text/javascript" charset="utf-8">
 		var tableData = [
-			{rank:"My Fair Lady", title:1964, year:533848, votes:8.9},
-			{rank:"My Fair Lady", title:1964, year:533848, votes:8.9}
+			{message:"Ornek Mesaj"},
+			{message:"Yo"}
 		];
-		//serialized json: {"rank":"Rock n Roll", "title":1996, "year":533848, "votes":8.9}
 						 ;
 		var tabbar = {
-		   view:"tabbar", selected: 'listView', multiview:true, options: [
-				{ value: 'List', id: 'listView'},
-				{ value: 'Form', id: 'formView'},
-				{ value: 'About', id: 'aboutView'}
+		   view:"tabbar", selected: 'Channel', multiview:true, options: [
+				{ value: 'Channel', id: 'Channel'},
+				{ value: 'Control', id: 'controlPanel'},
+				{ value: 'Form', id: 'formView'}
 			]
 		};
 		var data = {
 			animate:false,
 			cells:[
 				{
-					id:"listView",
+					id:"Channel",
 					view:"list",
-					template:"#rank#. #title# <div style='padding-left:18px'> Year:#year#, votes:#votes# </div>",
+					template:"#message#",
 					type:{
 						height:60
 					},
@@ -45,41 +44,88 @@
 					data:tableData
 				},
 				{
-					id:"formView",
-					template:"Place for the form control"
+				 	id:"controlPanel",
+					view:"form",
+					elements:[{
+						margin:5,
+						cols:[
+							{ view:"button", value:"Open" , click:"open()" },
+							{ view:"button", value:"Close", type:"form", click:"close()" },
+							{ view:"button", value:"Open-2" , click:"open2()" },
+							{ view:"button", value:"Close-2", type:"form", click:"close2()" }
+						]
+					}]
 				},
-				{
-				 	id:"aboutView",
-					template:"About the app"
+					{
+					id:"formView",
+					view:"form",
+					scroll:false,
+					elements:[
+                    { view:"text", id:"hname", label:"Hostname", name:"hostname" ,  placeholder:"m21.cloudmqtt.com", labelWidth: 80},
+					{ view:"text", id:"port", label:"Port",  name:"port",  placeholder:"31348", labelWidth: 80},
+                    { view:"text", id:"usr", label:"Username",  name:"username",  placeholder:"webUI", labelWidth: 80},
+					{ view:"text", id:"pass", label:"Password",  name:"password",  placeholder:"123456", labelWidth: 80},
+					{ view:"text", id:"top", label:"Topic",  name:"topic",  placeholder:"/test", labelWidth: 80},
+						{ margin:5, cols:[
+							{ view:"button", value:"Initialize Client" , click:"init()" },
+							{ view:"button", value:"Save", type:"form", click:"save()" }
+						]},
+						{}
+					]
 				}
 			]
 		};
+		var mqttConfig = {
+				hostname: "",
+				port: "",
+				clientID: "webUI_1",
+				username: "",
+				password: ""
+			};
+		var topic;
+			
+		function save(){
+			mqttConfig.hostname = $$("hname").getValue();
+			mqttConfig.port = $$("port").getValue();
+			mqttConfig.username = $$("usr").getValue();
+			mqttConfig.password = $$("pass").getValue();
+			topic = $$("top").getValue();
+			$$('hname').setValue('');
+			$$('port').setValue('');
+			$$('usr').setValue('');
+			$$('pass').setValue('');
+			$$('top').setValue('');
+			alert("configuration is saved.");
+		}
 		
-		function isJson(str) {
-			try {
-				JSON.parse(str);
-			} catch (e) {
-				return false;
-			}
-			return true;
+		function init(){
+			mqttApp.initialize(mqttConfig, topic);
+			mqttApp.setMessageRecievedCallback(parseRecievedMessage);
+			alert("client is initialized!");
+		}
+		
+		function open(){
+			mqttApp.publishMessage("open");
+		}
+		
+		function close(){
+			mqttApp.publishMessage("close");
+		}
+		
+		function open2(){
+			mqttApp.publishMessage("open2");
+		}
+		
+		function close2(){
+			mqttApp.publishMessage("close2");
 		}
 
-		function parseRecievedMessage(message){
-			if (isJson(message)) {
-				var recievedObject = JSON.parse(message);
-				//console.log("That:");
-				//console.log(tableData);
-				tableData.push(recievedObject);
-				$$("listView").add(recievedObject);
-				//$$("listView").refresh();
-			} else {
-				console.log("Meh this is NOT json((()))");
-			}
+		function parseRecievedMessage(recievedMessage){
+				var object = {message: recievedMessage};
+				$$("Channel").add(object);
 		};
 		
 		webix.ready(function(){
-			mqttApp.initialize();
-			mqttApp.setMessageRecievedCallback(parseRecievedMessage);
 			
 			webix.ui({
 				container: "areaA",

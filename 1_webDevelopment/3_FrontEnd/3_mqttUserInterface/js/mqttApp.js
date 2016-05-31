@@ -2,20 +2,24 @@
 var mqttApp = (function(){
 	var messageRecievedCallback = null;
 	
+	var testTopic = "";
+	
+	var client;
+	
 	return {
 		setMessageRecievedCallback: function(callback){
 			messageRecievedCallback = callback;
 		},
 		
-		initialize: function(){
-			var mqttConfig = {
-				hostname: "m21.cloudmqtt.com",
-				port: "31348",
-				clientID: "webUI_1",
-				username: "webUI",
-				password: "123456"
-			};
-			
+		publishMessage: function(message){
+			 message = new Paho.MQTT.Message(message);
+			 message.destinationName = testTopic;
+			 client.send(message);
+		},
+		
+		initialize: function(config, topic){
+			var mqttConfig = config;
+			testTopic = topic;
 			// Create a client instance
 			client = new Paho.MQTT.Client(mqttConfig.hostname, Number(mqttConfig.port), mqttConfig.clientID);
 
@@ -31,17 +35,17 @@ var mqttApp = (function(){
 			function onConnect() {
 			  // Once a connection has been made, make a subscription and send a message.
 			  console.log("onConnect");
-			  client.subscribe("/test");
-			  message = new Paho.MQTT.Message("Hello");
-			  message.destinationName = "/test";
+			  client.subscribe(testTopic);
+			  message = new Paho.MQTT.Message("UI is alive.");
+			  message.destinationName = testTopic;
 			  client.send(message);
 			}
 
 			// called when the client loses its connection
 			function onConnectionLost(responseObject) {
-			  if (responseObject.errorCode !== 0) {
-				console.log("onConnectionLost:"+responseObject.errorMessage);
-			  }
+				if (responseObject.errorCode !== 0) {
+					console.log("onConnectionLost:"+responseObject.errorMessage);
+				}
 			}
 
 			// called when a message arrives
