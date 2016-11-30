@@ -1,4 +1,4 @@
-# experiments
+# Experiments
 This repository contains various experiments of mine.
 
 This is a regular paragraph.
