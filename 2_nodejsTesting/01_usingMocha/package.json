@@ -1,0 +1,24 @@
+{
+  "name": "using-mocha",
+  "version": "0.0.0",
+  "description": "know-how for using mocha",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test/unit"
+  },
+  "keywords": [
+    "mocha",
+    "know-how",
+    "should",
+    "experiment"
+  ],
+  "author": "birkan",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "should": "^11.1.2"
+  }
+}
