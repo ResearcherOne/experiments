@@ -3,7 +3,7 @@ var app = express();
 
 var bodyParser = require('body-parser');
 var parseUrlencoded = bodyParser.urlencoded({extended: false}); /*{extended: false} option do "force the use of the native querystring Node library"*/
-
+//HEY HEY :)
 app.use(express.static('public'));
 
 app.post('/hardwarelibrary/add', parseUrlencoded, function (request, response){
@@ -14,5 +14,8 @@ app.post('/hardwarelibrary/add', parseUrlencoded, function (request, response){
 });
 
 app.listen(80, function () {
-  console.log('Example app listening on port 80!');
+  console.log('Now, app will listen on port 8080!');
 });
+
+
+//YO YO YO, IMA ADDED ROOT NODE.
