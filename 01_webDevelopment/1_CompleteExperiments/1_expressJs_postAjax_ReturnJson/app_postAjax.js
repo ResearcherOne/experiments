@@ -13,6 +13,9 @@ app.post('/hardwarelibrary/add', parseUrlencoded, function (request, response){
 	console.log("Hardware Name:"+newHardware.name+" Hardware Description:"+newHardware.description);
 });
 
-app.listen(80, function () {
-  console.log('Example app listening on port 80!');
+const PORT = 8080;
+app.listen(PORT, function () {
+  console.log('Example app listening on port '+PORT);
 });
+
+//Hey hey
