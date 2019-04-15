@@ -13,9 +13,9 @@ app.post('/hardwarelibrary/add', parseUrlencoded, function (request, response){
 	console.log("Hardware Name:"+newHardware.name+" Hardware Description:"+newHardware.description);
 });
 
-app.listen(80, function () {
-  console.log('Now, app will listen on port 8080!');
+const PORT = 8080;
+app.listen(PORT, function () {
+  console.log('Example app listening on port '+PORT);
 });
 
-
-//YO YO YO, IMA ADDED ROOT NODE.
+//Hey hey
